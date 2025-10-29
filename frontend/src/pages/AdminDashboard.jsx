@@ -219,55 +219,13 @@ const AdminDashboard = ({ user, onLogout }) => {
                       </div>
                     ))}
                   </div>
-                  <Dialog open={dialogOpen && selectedUser?.id === userData.id} onOpenChange={(open) => {
-                    setDialogOpen(open);
-                    if (!open) setSelectedUser(null);
-                  }}>
-                    <DialogTrigger asChild>
-                      <Button 
-                        onClick={() => openUpdateDialog(userData)} 
-                        className="w-full bg-indigo-600 hover:bg-indigo-700"
-                        data-testid={`update-deliveries-button-${userData.username}`}
-                      >
-                        Update Deliveries
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[500px]">
-                      <DialogHeader>
-                        <DialogTitle>Update Deliveries for {userData.username}</DialogTitle>
-                        <DialogDescription>
-                          Enter the delivery count for each truck type
-                        </DialogDescription>
-                      </DialogHeader>
-                      <div className="grid grid-cols-2 gap-4 py-4">
-                        {TRUCK_TYPES.map((truck) => (
-                          <div key={truck} className="space-y-2">
-                            <Label htmlFor={`${userData.id}-${truck}`}>{truck}</Label>
-                            <div className="flex gap-2">
-                              <Input
-                                id={`${userData.id}-${truck}`}
-                                data-testid={`input-${userData.username}-${truck}`}
-                                type="number"
-                                min="0"
-                                value={deliveryUpdates[`${userData.id}-${truck}`] || 0}
-                                onChange={(e) => setDeliveryUpdates({
-                                  ...deliveryUpdates,
-                                  [`${userData.id}-${truck}`]: e.target.value
-                                })}
-                              />
-                              <Button 
-                                size="sm"
-                                onClick={() => handleUpdateDelivery(userData.id, truck)}
-                                data-testid={`save-${userData.username}-${truck}-button`}
-                              >
-                                Save
-                              </Button>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </DialogContent>
-                  </Dialog>
+                  <Button 
+                    onClick={() => openUpdateDialog(userData)} 
+                    className="w-full bg-indigo-600 hover:bg-indigo-700"
+                    data-testid={`update-deliveries-button-${userData.username}`}
+                  >
+                    Update Deliveries
+                  </Button>
                 </CardContent>
               </Card>
             ))
