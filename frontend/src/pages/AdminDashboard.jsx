@@ -232,6 +232,50 @@ const AdminDashboard = ({ user, onLogout }) => {
           )}
         </div>
       </main>
+
+      {/* Update Delivery Dialog - Outside of card loop */}
+      {selectedUser && (
+        <Dialog open={dialogOpen} onOpenChange={(open) => {
+          setDialogOpen(open);
+          if (!open) setSelectedUser(null);
+        }}>
+          <DialogContent className="sm:max-w-[500px]">
+            <DialogHeader>
+              <DialogTitle>Update Deliveries for {selectedUser.username}</DialogTitle>
+              <DialogDescription>
+                Enter the delivery count for each truck type
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid grid-cols-2 gap-4 py-4">
+              {TRUCK_TYPES.map((truck) => (
+                <div key={truck} className="space-y-2">
+                  <Label htmlFor={`${selectedUser.id}-${truck}`}>{truck}</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      id={`${selectedUser.id}-${truck}`}
+                      data-testid={`input-${selectedUser.username}-${truck}`}
+                      type="number"
+                      min="0"
+                      value={deliveryUpdates[`${selectedUser.id}-${truck}`] || 0}
+                      onChange={(e) => setDeliveryUpdates({
+                        ...deliveryUpdates,
+                        [`${selectedUser.id}-${truck}`]: e.target.value
+                      })}
+                    />
+                    <Button 
+                      size="sm"
+                      onClick={() => handleUpdateDelivery(selectedUser.id, truck)}
+                      data-testid={`save-${selectedUser.username}-${truck}-button`}
+                    >
+                      Save
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 };
