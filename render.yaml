@@ -1,0 +1,42 @@
+# Render Blueprint for FleetTrack Commission Monitoring System
+# This file defines all services needed for deployment
+
+services:
+  # Backend API Service
+  - type: web
+    name: fleettrack-backend
+    runtime: python
+    region: oregon
+    plan: free
+    branch: main
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn server:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/
+    envVars:
+      - key: MONGO_URL
+        sync: false
+      - key: DB_NAME
+        value: fleettrack_db
+      - key: SECRET_KEY
+        generateValue: true
+      - key: CORS_ORIGINS
+        value: "*"
+
+  # Frontend Static Site
+  - type: web
+    name: fleettrack-frontend
+    runtime: static
+    region: oregon
+    plan: free
+    branch: main
+    rootDir: frontend
+    buildCommand: yarn install && REACT_APP_BACKEND_URL=$BACKEND_URL yarn build
+    staticPublishPath: build
+    envVars:
+      - key: REACT_APP_BACKEND_URL
+        sync: false
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
