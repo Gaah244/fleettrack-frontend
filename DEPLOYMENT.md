@@ -105,6 +105,10 @@ git push -u origin main
    **Build & Deploy:**
    - **Build Command**: 
      ```bash
+     npm install --legacy-peer-deps && npm run build
+     ```
+     OR if using Yarn:
+     ```bash
      yarn install && yarn build
      ```
    - **Publish Directory**: `build`
